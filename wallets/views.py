@@ -14,10 +14,24 @@ from .services import perform_operation
 
 
 class WalletDetailView(APIView):
+    # def get(self, request, wallet_uuid):
+    #     wallet = get_object_or_404(Wallet, uuid=wallet_uuid)
+    #     # balance = Wallet.objects.filter(uuid=wallet_uuid).values_list('balance', flat=True)
+    #     serializer = WalletSerializer(wallet)
+    #     # if balance is None:
+    #     #     return Response({"detail": "Wallet not found"}, status=404)
+    #     return Response(serializer.data)
+    #     # return Response({"balance": str(balance)}, status=200)
+
     def get(self, request, wallet_uuid):
-        wallet = get_object_or_404(Wallet, uuid=wallet_uuid)
-        serializer = WalletSerializer(wallet)
-        return Response(serializer.data)
+        # Извлекаем только нужные поля из базы данных
+        balance = Wallet.objects.filter(uuid=wallet_uuid).values('balance').first()
+
+        # Если объект не найден, возвращаем 404
+        if not balance:
+            return Response({"detail": "Not found."}, status=404)
+
+        return Response(balance)
 
 
 """Проведение операций с кошельком:

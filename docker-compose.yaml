@@ -1,0 +1,47 @@
+
+services:
+  wallet_db:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - env_files/.env.db
+    ports:
+      - '5438:5432'
+    restart: always
+  app:
+    build:
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate && gunicorn --workers 3 --threads 2 config.wsgi:application --bind 0.0.0.0:8000"
+    expose:
+      - '8000'
+    restart: always
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+    depends_on:
+      - wallet_db
+    env_file:
+      - env_files/.env
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "200k"
+  nginx:
+    build: ./nginx
+    # Подключаем статические и медиа файлы
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - '1337:80'
+    depends_on:
+      - app
+    restart: always
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
