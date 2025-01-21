@@ -1,45 +1,38 @@
 from django.shortcuts import render, get_object_or_404
+from drf_spectacular.utils import extend_schema
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, NotFound
-from rest_framework import status
+from rest_framework import status, generics
 from django.db import transaction
 
 from .models import Wallet
 from .serializers import WalletSerializer, OperationSerializer
 from .services import perform_operation
 
-"""Запрос баланса кошелька"""
-
 
 class WalletDetailView(APIView):
-    # def get(self, request, wallet_uuid):
-    #     wallet = get_object_or_404(Wallet, uuid=wallet_uuid)
-    #     # balance = Wallet.objects.filter(uuid=wallet_uuid).values_list('balance', flat=True)
-    #     serializer = WalletSerializer(wallet)
-    #     # if balance is None:
-    #     #     return Response({"detail": "Wallet not found"}, status=404)
-    #     return Response(serializer.data)
-    #     # return Response({"balance": str(balance)}, status=200)
-
+    """Запрос баланса кошелька"""
     def get(self, request, wallet_uuid):
-        # Извлекаем только нужные поля из базы данных
-        balance = Wallet.objects.filter(uuid=wallet_uuid).values('balance').first()
-
-        # Если объект не найден, возвращаем 404
-        if not balance:
-            return Response({"detail": "Not found."}, status=404)
-
-        return Response(balance)
+        wallet = get_object_or_404(Wallet, uuid=wallet_uuid)
+        serializer = WalletSerializer(wallet)
+        return Response(serializer.data)
 
 
-"""Проведение операций с кошельком:
-"""
 
 
 class WalletOperationView(APIView):
+    """Проведение операций с кошельком.
+    для параметра operationType:
+    DEPOSIT - увеличиваем баланс кошелька на указанный amount
+    WITHDRAW - уменьшаем баланс кошелька на указанный amount
+    """
     @transaction.atomic
+    @extend_schema(
+        request=OperationSerializer,
+        responses={200: WalletSerializer}
+    )
     def post(self, request, wallet_uuid):
         try:
             wallet = Wallet.objects.select_for_update().get(uuid=wallet_uuid)
@@ -56,3 +49,14 @@ class WalletOperationView(APIView):
 
         wallet.save()
         return Response(WalletSerializer(wallet).data, status=status.HTTP_200_OK)
+
+
+class CreateWalletView(generics.CreateAPIView):
+    """Создание тестового кошелька"""
+    serializer_class = WalletSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
