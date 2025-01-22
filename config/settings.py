@@ -1,4 +1,5 @@
 import os
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -123,22 +124,46 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+LOGS_DIR = BASE_DIR / 'logs'
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
+LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'DEBUG').upper()
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
+    'version': 1,  # Версия конфигурации
+    'disable_existing_loggers': False,  # Не отключать существующие логгеры
+    'formatters': {
+        'console': {
+            'format': '%(asctime)s - %(levelname)s - [%(name)s:%(lineno)s] - %(module)s - %(message)s',
+        },
+        'file': {
+            'format': '%(asctime)s - %(levelname)s - [%(name)s:%(lineno)s] - %(module)s - %(message)s',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'console'
         },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'django_app.log',  # Имя файла лога
+            'formatter': 'file',
+            'mode': 'a',  # Режим открытия файла: 'a' для добавления, 'w' для перезаписи
+        }
     },
     'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
+        '': {  # Корневой логгер
+            'handlers': ['console', 'file'],  # Используем оба обработчика
+            'level': LOGLEVEL,
+            'propagate': True,  # Передавать сообщения родителям
         }
     },
 }
+
+handler = RotatingFileHandler(
+    'django_app.log',        # Имя файла лога
+    maxBytes=5*1024*1024,  # Максимальный размер файла (5 МБ)
+)
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',

@@ -5,7 +5,7 @@ import random
 
 class WalletUser(HttpUser):
     wait_time = between(1, 2)  # Время ожидания между запросами
-    wallet_uuid = '1ff65aea-9739-48aa-85e0-c851ae0a9d93'
+    wallet_uuid = '9746358b-84c9-4a1f-b9dc-009e89842cdf'
     @task
     def get_wallet_detail(self):
         # Выполняем GET-запрос к эндпоинту для получения деталей кошелька

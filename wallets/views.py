@@ -1,12 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from drf_spectacular.utils import extend_schema
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, NotFound
 from rest_framework import status, generics
 from django.db import transaction
-
 from .models import Wallet
 from .serializers import WalletSerializer, OperationSerializer
 from .services import perform_operation
@@ -14,12 +12,12 @@ from .services import perform_operation
 
 class WalletDetailView(APIView):
     """Запрос баланса кошелька"""
+    serializer_class = WalletSerializer
+
     def get(self, request, wallet_uuid):
         wallet = get_object_or_404(Wallet, uuid=wallet_uuid)
-        serializer = WalletSerializer(wallet)
+        serializer = self.serializer_class(wallet)
         return Response(serializer.data)
-
-
 
 
 class WalletOperationView(APIView):
