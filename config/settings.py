@@ -22,9 +22,6 @@ INTERNAL_IPS = [
 ]
 
 
-
-# Application definition
-
 INSTALLED_APPS = [
     # 'django.contrib.admin',
     'django.contrib.auth',
@@ -129,8 +126,8 @@ if not os.path.exists(LOGS_DIR):
     os.makedirs(LOGS_DIR)
 LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'DEBUG').upper()
 LOGGING = {
-    'version': 1,  # Версия конфигурации
-    'disable_existing_loggers': False,  # Не отключать существующие логгеры
+    'version': 1,
+    'disable_existing_loggers': False,
     'formatters': {
         'console': {
             'format': '%(asctime)s - %(levelname)s - [%(name)s:%(lineno)s] - %(module)s - %(message)s',
@@ -146,23 +143,23 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'logs' / 'django_app.log',  # Имя файла лога
+            'filename': BASE_DIR / 'logs' / 'django_app.log',
             'formatter': 'file',
-            'mode': 'a',  # Режим открытия файла: 'a' для добавления, 'w' для перезаписи
+            'mode': 'a',
         }
     },
     'loggers': {
         '': {  # Корневой логгер
-            'handlers': ['console', 'file'],  # Используем оба обработчика
+            'handlers': ['console', 'file'],
             'level': LOGLEVEL,
-            'propagate': True,  # Передавать сообщения родителям
+            'propagate': True,
         }
     },
 }
 
 handler = RotatingFileHandler(
-    'django_app.log',        # Имя файла лога
-    maxBytes=5*1024*1024,  # Максимальный размер файла (5 МБ)
+    'django_app.log',
+    maxBytes=5*1024*1024,
 )
 
 REST_FRAMEWORK = {
