@@ -22,7 +22,7 @@ def perform_wallet_operation(self, wallet_uuid,
                 raise ValidationError("Invalid operation type")
 
             wallet.save()
-            return {"status": "success", "balance": wallet.balance}
+            return {"status": "success", "balance": str(wallet.balance)}
     except Wallet.DoesNotExist:
         return {"status": "error", "message": "Wallet not found"}
     except ValidationError as e:

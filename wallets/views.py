@@ -12,6 +12,7 @@ from django.db import transaction
 from .models import Wallet
 from .serializers import WalletSerializer, OperationSerializer
 from .services import perform_operation
+from .tasks import perform_wallet_operation
 
 
 class WalletDetailView(APIView):

@@ -13,7 +13,9 @@ services:
     build:
       dockerfile: Dockerfile
     command: >
-      sh -c "python manage.py migrate && gunicorn --workers 3 --threads 2 config.wsgi:application --bind 0.0.0.0:8000"
+      sh -c "python manage.py migrate && 
+      gunicorn --workers 3 --threads 2 core.wsgi:application --bind 0.0.0.0:8000 
+      & celery -A core worker -l INFO"
     expose:
       - '8000'
     restart: always
@@ -21,6 +23,7 @@ services:
       - django_logs:/app/logs
     depends_on:
       - wallet_db
+      - redis
     env_file:
       - env_files/.env
     logging:
@@ -28,6 +31,14 @@ services:
       options:
         max-file: "10"
         max-size: "200k"
+  redis:
+    image: redis
+    restart: always
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
   nginx:
     build: ./nginx
     ports:
@@ -39,4 +50,5 @@ services:
 volumes:
   postgres_data:
   django_logs:
+  redis-data:
 

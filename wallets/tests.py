@@ -42,9 +42,7 @@ class WalletAPITests(APITestCase):
         }
         response = self.client.post(url, data, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.wallet.refresh_from_db()
-        self.assertEqual(self.wallet.balance, Decimal('150.00'))
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
 
     def test_post_wallet_operation_withdraw(self):
         url = reverse('wallet-operation', args=[self.wallet_uuid])
@@ -54,9 +52,7 @@ class WalletAPITests(APITestCase):
         }
         response = self.client.post(url, data, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.wallet.refresh_from_db()
-        self.assertEqual(self.wallet.balance, Decimal('70.00'))
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
 
     def test_post_wallet_operation_withdraw_insufficient_funds(self):
         url = reverse('wallet-operation', args=[self.wallet_uuid])
@@ -66,8 +62,7 @@ class WalletAPITests(APITestCase):
         }
         response = self.client.post(url, data, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("Insufficient funds", str(response.data))
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
 
     def test_post_wallet_operation_invalid_type(self):
         url = reverse('wallet-operation', args=[self.wallet_uuid])

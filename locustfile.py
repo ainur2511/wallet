@@ -4,7 +4,7 @@ import random
 
 class WalletUser(HttpUser):
     wait_time = between(1, 2)  # Время ожидания между запросами
-    wallet_uuid = '9746358b-84c9-4a1f-b9dc-009e89842cdf'
+    wallet_uuid = '5055fd6d-3699-4472-a234-99c2e69d19f0'
 
     # @task
     # def get_wallet_detail(self):
