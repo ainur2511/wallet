@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import WalletDetailView, WalletOperationView, CreateWalletView, TaskStatusView
+from .views import (WalletDetailView,
+                    WalletOperationView,
+                    CreateWalletView,
+                    TaskStatusView,
+                    )
 from drf_spectacular.views import (SpectacularAPIView,
                                    SpectacularSwaggerView,
                                    SpectacularRedocView)

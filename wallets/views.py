@@ -1,4 +1,3 @@
-import time
 
 from celery.result import AsyncResult
 from django.core.cache import cache
@@ -6,12 +5,10 @@ from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
 from rest_framework import status, generics
 from django.db import transaction
 from .models import Wallet
 from .serializers import WalletSerializer, OperationSerializer
-from .services import perform_operation
 from .tasks import perform_wallet_operation
 
 
