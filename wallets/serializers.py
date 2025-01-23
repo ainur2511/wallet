@@ -14,6 +14,7 @@ class WalletSerializer(serializers.ModelSerializer):
         model = Wallet
         fields = ['uuid', 'balance', ]
 
+    @staticmethod
     def validate_balance(self, value):
         return validate_score(value)
 
@@ -24,5 +25,6 @@ class OperationSerializer(serializers.Serializer):
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
 
     # Валидируем, чтобы число amount было положительным
+    @staticmethod
     def validate_amount(self, value):
         return validate_score(value)

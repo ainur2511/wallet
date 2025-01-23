@@ -15,7 +15,9 @@ class Migration(migrations.Migration):
             name='Wallet',
             fields=[
                 ('uuid', models.UUIDField(primary_key=True, serialize=False)),
-                ('balance', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
+                ('balance', models.DecimalField(decimal_places=2,
+                                                default=0,
+                                                max_digits=10)),
             ],
         ),
     ]

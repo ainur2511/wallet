@@ -12,7 +12,9 @@ def perform_operation(wallet: Wallet, operation_type: str, amount: float):
         wallet.balance += amount
     elif operation_type == 'WITHDRAW':
         if wallet.balance < amount:
-            raise ValidationError("Insufficient funds")  # Если недостаточно средств, возвращаем ошибку
+            # Если недостаточно средств, возвращаем ошибку
+            raise ValidationError("Insufficient funds")
         wallet.balance -= amount
     else:
-        raise ValidationError("Invalid operation type")  # Если неизвестный тип операции - возвращаем ошибку
+        # Если неизвестный тип операции - возвращаем ошибку
+        raise ValidationError("Invalid operation type")

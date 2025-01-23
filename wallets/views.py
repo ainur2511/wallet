@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError, NotFound
+from rest_framework.exceptions import NotFound
 from rest_framework import status, generics
 from django.db import transaction
 from .models import Wallet
@@ -42,11 +42,12 @@ class WalletOperationView(APIView):
 
         operation_type = serializer.validated_data['operationType']
         amount = serializer.validated_data['amount']
-
-        perform_operation(wallet, operation_type, amount)  # Вызываем функцию из services.py
+        # Вызываем функцию из services.py
+        perform_operation(wallet, operation_type, amount)
 
         wallet.save()
-        return Response(WalletSerializer(wallet).data, status=status.HTTP_200_OK)
+        return Response(WalletSerializer(wallet).data,
+                        status=status.HTTP_200_OK)
 
 
 class CreateWalletView(generics.CreateAPIView):

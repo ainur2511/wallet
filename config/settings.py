@@ -5,12 +5,13 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-8smvj&jw)pqd_v1fh_n@kyb#5@hlejm8w)vh2-pptpj0ap5=ee')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY',
+                       'django-insecure-8smvj&jw)pqd_v1fh_'
+                       '@kyb#5@hlejm8w)vh2-pptpj0ap5=ee')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', True)
@@ -20,7 +21,6 @@ CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:1337']
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
-
 
 INSTALLED_APPS = [
     # 'django.contrib.admin',
@@ -50,9 +50,9 @@ ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'BACKEND':
+            'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,25 +79,28 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -109,7 +112,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -124,16 +126,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGS_DIR = BASE_DIR / 'logs'
 if not os.path.exists(LOGS_DIR):
     os.makedirs(LOGS_DIR)
+
+log_format = ('%(asctime)s - %(levelname)s - '
+              '[%(name)s:%(lineno)s] - %(module)s - %(message)s')
 LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'DEBUG').upper()
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'console': {
-            'format': '%(asctime)s - %(levelname)s - [%(name)s:%(lineno)s] - %(module)s - %(message)s',
+            'format':
+                log_format,
         },
         'file': {
-            'format': '%(asctime)s - %(levelname)s - [%(name)s:%(lineno)s] - %(module)s - %(message)s',
+            'format':
+                log_format,
         },
     },
     'handlers': {
@@ -159,7 +166,7 @@ LOGGING = {
 
 handler = RotatingFileHandler(
     'django_app.log',
-    maxBytes=5*1024*1024,
+    maxBytes=5 * 1024 * 1024,
 )
 
 REST_FRAMEWORK = {
@@ -172,7 +179,4 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 
-
 }
-
-

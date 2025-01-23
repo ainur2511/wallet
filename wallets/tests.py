@@ -2,7 +2,7 @@ import uuid
 
 from rest_framework.test import APITestCase
 from rest_framework import status
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from .models import Wallet
 from decimal import Decimal
 
