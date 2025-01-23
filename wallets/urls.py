@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import WalletDetailView, WalletOperationView, CreateWalletView
+from .views import WalletDetailView, WalletOperationView, CreateWalletView, TaskStatusView
 from drf_spectacular.views import (SpectacularAPIView,
                                    SpectacularSwaggerView,
                                    SpectacularRedocView)
@@ -14,6 +14,9 @@ urlpatterns = [
     path('api/v1/wallets/create/',
          CreateWalletView.as_view(),
          name='wallet-create'),
+    path('api/v1/wallets/status/<str:task_id>',
+         TaskStatusView.as_view(),
+         name='task-status'),
     path('api/schema/',
          SpectacularAPIView.as_view(),
          name='schema'),
